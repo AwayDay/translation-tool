@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { Paragraph, Sentence } from "../types/ArticleTypes";
+import { Paragraph, Sentence } from "../types/ArticleTypes"
 
 const ParagraphNode: React.FunctionComponent<{ paragraph: Paragraph }> = ({
   paragraph,
@@ -25,7 +25,14 @@ const ParagraphNode: React.FunctionComponent<{ paragraph: Paragraph }> = ({
   }
 
   const onClickSentence = (sentence: Sentence): void => {
-    let inputString = window.prompt(sentence.original, sentence.translated)
+    const prev =
+      typeof sentence.translated === `object` && !sentence.translated
+        ? ``
+        : sentence.translated
+    let inputString = window.prompt(sentence.original, prev)
+    if (typeof inputString === `object` && !inputString) {
+      return
+    }
 
     const tmp: Paragraph = {
       ...paragraphStore,
@@ -65,6 +72,6 @@ const ParagraphNode: React.FunctionComponent<{ paragraph: Paragraph }> = ({
       </section>
     </section>
   )
-};
+}
 
-export default ParagraphNode;
+export default ParagraphNode
