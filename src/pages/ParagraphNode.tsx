@@ -49,7 +49,9 @@ const ParagraphNode: React.FunctionComponent<{ paragraph: Paragraph }> = ({
         <p>
           {paragraphStore.sentences.map(sentence => (
             <span
-              className="py-1 mr-1"
+              className={
+                sentence.translated ? "py-1 mr-1" : "py-1 mr-1 text-red-700"
+              }
               data-id={sentence.id}
               key={sentence.id}
               onMouseOver={e => onSentenceHoverIn(e)}
@@ -64,7 +66,15 @@ const ParagraphNode: React.FunctionComponent<{ paragraph: Paragraph }> = ({
       <section className="flex-1 break-words ml-2">
         <p>
           {paragraphStore.sentences.map(sentence => (
-            <span className="py-1 mr-1" data-id={sentence.id} key={sentence.id}>
+            <span
+              className={
+                sentence.translated
+                  ? "py-1 mr-1"
+                  : "py-1 mr-1 font-light text-gray-500"
+              }
+              data-id={sentence.id}
+              key={sentence.id}
+            >
               {sentence.translated ? sentence.translated : sentence.original}
             </span>
           ))}
