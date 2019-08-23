@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "@types/react-helmet": "^5.0.9",
+    "eslint": "^6.2.1",
     "prettier": "^1.18.2"
   },
   "keywords": [
