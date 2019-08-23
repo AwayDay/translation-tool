@@ -1,30 +1,30 @@
 interface Article {
-  id: string
-  title: ArticleTitle
-  body: ArticleBody
+  id: string;
+  title: ArticleTitle;
+  body: ArticleBody;
 }
 
 interface ArticleTitle {
-  original: string
-  translated: string
+  original: string;
+  translated: string | null;
 }
 
 interface ArticleBody {
-  sections: Section[]
+  sections: Section[];
 }
 
-type Section = Paragraph
+type Section = Paragraph;
 
 interface Paragraph {
-  id: string
-  type: "paragraph"
-  sentences: Sentence[]
+  id: string;
+  type: 'paragraph';
+  sentences: Sentence[];
 }
 
 interface Sentence {
-  id: string
-  original: string
-  translated: string
+  id: string;
+  original: string;
+  translated: string | null;
 }
 
-export { Article, ArticleTitle, ArticleBody, Section, Paragraph, Sentence }
+export { Article, ArticleTitle, ArticleBody, Section, Paragraph, Sentence };

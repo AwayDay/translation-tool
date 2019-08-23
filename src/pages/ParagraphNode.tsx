@@ -1,47 +1,47 @@
-import React, { useState, useEffect } from "react"
-import { Paragraph, Sentence } from "../types/ArticleTypes"
+import React, { useState, useEffect } from 'react';
+import { Paragraph, Sentence } from '../types/ArticleTypes';
 
 const ParagraphNode: React.FunctionComponent<{ paragraph: Paragraph }> = ({
   paragraph,
 }) => {
-  const [paragraphStore, setParagraph] = useState(paragraph)
+  const [paragraphStore, setParagraph] = useState(paragraph);
 
   const onSentenceHoverIn = (
     e: React.MouseEvent<HTMLSpanElement, MouseEvent>
   ): void => {
     const couple = document.querySelectorAll(
       `span[data-id='${e.currentTarget.dataset.id}']`
-    )
-    couple.forEach(node => node.classList.add(`bg-indigo-200`))
-  }
+    );
+    couple.forEach(node => node.classList.add(`bg-indigo-200`));
+  };
 
   const onSentenceHoverOut = (
     e: React.MouseEvent<HTMLSpanElement, MouseEvent>
   ): void => {
     const couple = document.querySelectorAll(
       `span[data-id='${e.currentTarget.dataset.id}']`
-    )
-    couple.forEach(node => node.classList.remove(`bg-indigo-200`))
-  }
+    );
+    couple.forEach(node => node.classList.remove(`bg-indigo-200`));
+  };
 
   const onClickSentence = (sentence: Sentence): void => {
     const prev =
       typeof sentence.translated === `object` && !sentence.translated
         ? ``
-        : sentence.translated
-    let inputString = window.prompt(sentence.original, prev)
+        : sentence.translated;
+    let inputString = window.prompt(sentence.original, prev);
     if (typeof inputString === `object` && !inputString) {
-      return
+      return;
     }
 
     const tmp: Paragraph = {
       ...paragraphStore,
-    }
+    };
     tmp.sentences = tmp.sentences.map(s =>
       s.id !== sentence.id ? s : { ...s, translated: inputString }
-    )
-    setParagraph(tmp)
-  }
+    );
+    setParagraph(tmp);
+  };
 
   return (
     <section className="flex flex-row my-5 leading-relaxed">
@@ -50,7 +50,7 @@ const ParagraphNode: React.FunctionComponent<{ paragraph: Paragraph }> = ({
           {paragraphStore.sentences.map(sentence => (
             <span
               className={
-                sentence.translated ? "py-1 mr-1" : "py-1 mr-1 text-red-700"
+                sentence.translated ? 'py-1 mr-1' : 'py-1 mr-1 text-red-700'
               }
               data-id={sentence.id}
               key={sentence.id}
@@ -69,8 +69,8 @@ const ParagraphNode: React.FunctionComponent<{ paragraph: Paragraph }> = ({
             <span
               className={
                 sentence.translated
-                  ? "py-1 mr-1"
-                  : "py-1 mr-1 font-light text-gray-500"
+                  ? 'py-1 mr-1'
+                  : 'py-1 mr-1 font-light text-gray-500'
               }
               data-id={sentence.id}
               key={sentence.id}
@@ -81,7 +81,7 @@ const ParagraphNode: React.FunctionComponent<{ paragraph: Paragraph }> = ({
         </p>
       </section>
     </section>
-  )
-}
+  );
+};
 
-export default ParagraphNode
+export default ParagraphNode;
