@@ -3,8 +3,8 @@ import React from 'react';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
 
-import { TestDataSet } from './testDataSet';
-import SectionNode from './SectionNode';
+import { TestDataSet } from '../components/transrator/testDataSet';
+import SectionNode from '../components/transrator/SectionNode';
 
 const test = TestDataSet;
 

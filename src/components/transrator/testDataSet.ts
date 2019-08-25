@@ -1,4 +1,4 @@
-import { Article } from '../types/ArticleTypes';
+import { Article } from '../../types/ArticleTypes';
 
 const TestDataSet: Article = {
   id: `ajslkdjlkajxcklj`,

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Paragraph, Sentence } from '../types/ArticleTypes';
+import { Paragraph, Sentence } from '../../types/ArticleTypes';
 
 const ParagraphNode: React.FunctionComponent<{ paragraph: Paragraph }> = ({
   paragraph,

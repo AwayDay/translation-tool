@@ -1,5 +1,5 @@
 import React from 'react';
-import { Section } from '../types/ArticleTypes';
+import { Section } from '../../types/ArticleTypes';
 import ParagraphNode from './ParagraphNode';
 
 const SectionNode: React.FunctionComponent<{ section: Section }> = ({
