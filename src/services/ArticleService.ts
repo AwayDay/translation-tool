@@ -10,13 +10,13 @@ const generateArticle = (title: string, body: string): Article => {
       const sentenceText = text.split(/\. /);
       const sentences = sentenceText.map(
         (text, index): Sentence => ({
-          id: index + ``,
+          id: generateUuid(),
           original: text,
           translated: null,
         })
       );
       return {
-        id: index + ``,
+        id: generateUuid(),
         type: `paragraph`,
         sentences: sentences,
       };
