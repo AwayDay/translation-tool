@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Article } from '../types/ArticleTypes';
 import { generateArticle, saveArticle } from '../services/ArticleService';
+import Layout from '../components/layout';
 
 const processInput = (title: string, body: string): Article | null => {
   if (!title || !body) {
@@ -23,11 +24,33 @@ const NewPage: React.FunctionComponent = () => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   return (
-    <>
-      <input type="text" onChange={e => setTitle(e.target.value)} />
-      <textarea onChange={e => setBody(e.target.value)} />
-      <button onClick={e => save(title, body)}>야호</button>
-    </>
+    <Layout>
+      <main className="my-5">
+        <form className="flex flex-col">
+          <label>
+            Title
+            <input
+              type="text"
+              className="block w-full border border-solid border-gray-900 rounded mb-3"
+              onChange={e => setTitle(e.target.value)}
+            />
+          </label>
+          <label>
+            Body
+            <textarea
+              className="block w-full h-64 border border-solid border-gray-900 rounded mb-3"
+              onChange={e => setBody(e.target.value)}
+            />
+          </label>
+          <button
+            className="bg-gray-300 rounded mb-3"
+            onClick={e => save(title, body)}
+          >
+            save
+          </button>
+        </form>
+      </main>
+    </Layout>
   );
 };
 
