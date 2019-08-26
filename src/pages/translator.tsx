@@ -20,8 +20,8 @@ const TranslatorPage: React.FunctionComponent<{
 
   return (
     <Layout>
-      <SEO title="Home" />
-      <main className="flex flex-col my-5">
+      <SEO title={article.title.original} />
+      <section className="flex flex-col">
         <section className="flex flex-col mx-auto my-5">
           <section className="flex-1 break-words">
             <h1>{article.title.original}</h1>
@@ -30,10 +30,12 @@ const TranslatorPage: React.FunctionComponent<{
             <h1>{article.title.translated}</h1>
           </section>
         </section>
-        {article.body.sections.map(section => (
-          <SectionNode section={section} key={section.id} />
-        ))}
-      </main>
+        <section>
+          {article.body.sections.map(section => (
+            <SectionNode section={section} key={section.id} />
+          ))}
+        </section>
+      </section>
     </Layout>
   );
 };

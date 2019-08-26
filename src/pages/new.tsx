@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Article } from '../types/ArticleTypes';
 import { generateArticle, saveArticle } from '../services/ArticleService';
 import Layout from '../components/layout';
+import SEO from '../components/seo';
 
 const processInput = (title: string, body: string): Article | null => {
   if (!title || !body) {
@@ -17,7 +18,9 @@ const save = (title: string, body: string): void => {
   if (!article) {
     return;
   }
-  saveArticle(article).then(article => {}).catch(message => {});
+  saveArticle(article)
+    .then(article => {})
+    .catch(message => {});
 };
 
 const NewPage: React.FunctionComponent = () => {
@@ -25,7 +28,8 @@ const NewPage: React.FunctionComponent = () => {
   const [body, setBody] = useState('');
   return (
     <Layout>
-      <main className="my-5">
+      <SEO title="New Article" />
+      <section>
         <form className="flex flex-col">
           <label>
             Title
@@ -49,7 +53,7 @@ const NewPage: React.FunctionComponent = () => {
             save
           </button>
         </form>
-      </main>
+      </section>
     </Layout>
   );
 };
