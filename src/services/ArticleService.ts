@@ -1,7 +1,7 @@
 import { Article, Paragraph, Sentence } from '../types/ArticleTypes';
 
 import generateUuid from '../utils/uuid';
-import { save } from '../repositories/ArticleStore';
+import { save, select, selectAll } from '../repositories/ArticleStore';
 
 const generateArticle = (title: string, body: string): Article => {
   const paragraphTexts = body.split(`\n`).filter(t => t.length > 0);
@@ -35,11 +35,14 @@ const generateArticle = (title: string, body: string): Article => {
   };
 };
 
-const saveArticle = (
-  article: Article,
-  callback?: (id: string) => void
-): void => {
-  save(article, callback);
+const saveArticle = (article: Article) => {
+  return save(article);
 };
 
-export { generateArticle, saveArticle };
+const getArticle = (key: string) => {
+  return select(key);
+}
+
+const getArticles = () => selectAll();
+
+export { generateArticle, saveArticle, getArticle, getArticles };

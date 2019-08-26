@@ -3,30 +3,20 @@ import { Article } from '../types/ArticleTypes';
 const DB_NAME = 'MyTestDatabase';
 const OBJECT_STORE_NAME = 'articles';
 
-const save = (article: Article, callback?: (id: string) => void): void => {
+const openDb = new Promise((resolve: (db: IDBDatabase) => void, reject: (message: string) => void) => {
   if (!window.indexedDB) {
-    window.alert(
-      "Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available."
-    );
+    reject(`Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available.`);
   }
+
   const request = window.indexedDB.open(DB_NAME);
 
   request.onerror = function(event) {
-    alert('Database openning error');
+    reject(`Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available.`);
   };
+
   request.onsuccess = function(event) {
     const db = request.result;
-    const transaction = db.transaction([OBJECT_STORE_NAME], 'readwrite');
-    transaction.oncomplete = function(event) {
-      alert('All done!');
-    };
-
-    transaction.onerror = function(event) {
-      // Don't forget to handle errors!
-    };
-
-    const store = transaction.objectStore(OBJECT_STORE_NAME);
-    store.add(article);
+    resolve(db);
   };
 
   request.onupgradeneeded = function(event) {
@@ -34,95 +24,76 @@ const save = (article: Article, callback?: (id: string) => void): void => {
     const objectStore = db.createObjectStore(OBJECT_STORE_NAME, {
       keyPath: 'id',
     });
-
     objectStore.transaction.oncomplete = function(event) {
-      const customerObjectStore = db
-        .transaction(OBJECT_STORE_NAME, 'readwrite')
-        .objectStore(OBJECT_STORE_NAME);
-      customerObjectStore.add(article);
+      resolve(db);
     };
   };
+});
+
+const save = (article: Article) => {
+  return new Promise((resolve: (article: Article) => void, reject: (message: string) => void) => {
+    openDb.then(db => {
+      const transaction = db.transaction([OBJECT_STORE_NAME], 'readwrite');
+      transaction.oncomplete = function(event) {
+        resolve(article);
+      };
+  
+      transaction.onerror = function(event) {
+        reject('fail');
+      };
+  
+      const store = transaction.objectStore(OBJECT_STORE_NAME);
+      store.add(article);
+    }).catch(message => {
+      reject(message);
+    });
+  });
 };
 
-const select = (
-  key: string,
-  success: (article: Article) => void,
-  error: () => void
-): void => {
-  if (!window.indexedDB) {
-    window.alert(
-      "Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available."
-    );
-  }
-  const request = window.indexedDB.open(DB_NAME);
-
-  request.onerror = function(event) {
-    alert('Database openning error');
-  };
-  request.onsuccess = function(event) {
-    const db = request.result;
-    const transaction = db.transaction([OBJECT_STORE_NAME]);
-    const objectStore = transaction.objectStore(OBJECT_STORE_NAME);
-    const articleRequest = objectStore.get(key);
-    articleRequest.onsuccess = function(successEvent) {
-      if (!successEvent.target) {
-        error();
-        return;
-      }
-      console.debug(successEvent.target.result);
-      success(successEvent.target.result);
-    };
-
-    articleRequest.onerror = function(event) {
-      // Don't forget to handle errors!
-    };
-  };
-
-  request.onupgradeneeded = function(event) {
-    const db = request.result;
-    db.createObjectStore(OBJECT_STORE_NAME, {
-      keyPath: 'id',
+const select = (key: string) => {
+  return new Promise((resolve: (article: Article) => void, reject: (message: string) => void) => {
+    openDb.then(db => {
+      const request = db
+        .transaction(OBJECT_STORE_NAME)
+        .objectStore(OBJECT_STORE_NAME)
+        .get(key);
+      request.onsuccess = event => {
+        if (!request.result) {
+          reject('no result');
+          return;
+        }
+        console.debug(request.result);
+        resolve(request.result);
+      };
+    }).catch(message => {
+      reject(message);
     });
-    error();
-  };
+  });
 };
 
-const selectAll = (success: (article: Article[]) => void): void => {
-  if (!window.indexedDB) {
-    window.alert(
-      "Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available."
-    );
-  }
-  const request = window.indexedDB.open(DB_NAME);
-
-  request.onerror = function(event) {
-    alert('Database openning error');
-  };
-  request.onsuccess = function(event) {
-    const db = request.result;
-    var objectStore = db
-      .transaction(OBJECT_STORE_NAME)
-      .objectStore(OBJECT_STORE_NAME);
-
-    const articles: Article[] = [];
-    objectStore.openCursor().onsuccess = function(event) {
-      var cursor = event.target.result;
-      if (cursor) {
-        console.debug(cursor.value);
-        articles.push(cursor.value);
-        cursor.continue();
-      } else {
-        success(articles);
-      }
-    };
-  };
-  request.onupgradeneeded = function(event) {
-    const db = request.result;
-    db.createObjectStore(OBJECT_STORE_NAME, {
-      keyPath: 'id',
+const selectAll = () => {
+  return new Promise((resolve: (article: Article[]) => void, reject: (message: string) => void) => {
+    openDb.then(db => {
+      const articles: Article[] = [];
+      var request = db
+        .transaction(OBJECT_STORE_NAME)
+        .objectStore(OBJECT_STORE_NAME)
+        .openCursor();
+      request.onsuccess = event => {
+        var cursor = request.result;
+        if (cursor) {
+          console.debug(cursor.value);
+          articles.push(cursor.value);
+          cursor.continue();
+        } else {
+          console.log('cursor end');
+          resolve(articles);
+        }
+      };
+    }).catch(message => {
+      reject(message);
     });
-    success([]);
-  };
+  });
 };
 
 export { save, select, selectAll };

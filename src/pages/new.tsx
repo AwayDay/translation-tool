@@ -17,7 +17,7 @@ const save = (title: string, body: string): void => {
   if (!article) {
     return;
   }
-  saveArticle(article);
+  saveArticle(article).then(article => {}).catch(message => {});
 };
 
 const NewPage: React.FunctionComponent = () => {

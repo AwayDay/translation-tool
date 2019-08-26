@@ -5,7 +5,7 @@ import SEO from '../components/seo';
 
 import { TestDataSet } from '../components/transrator/testDataSet';
 import SectionNode from '../components/transrator/SectionNode';
-import { select } from '../repositories/ArticleStore';
+import { getArticle } from '../services/ArticleService';
 
 const test = TestDataSet;
 
@@ -15,8 +15,8 @@ const TranslatorPage: React.FunctionComponent<{
   const [article, setArticle] = useState(test);
   useEffect(() => {
     console.log(location.state.articleId);
-    select(location.state.articleId, article => setArticle(article), () => {});
-  });
+    getArticle(location.state.articleId).then(article => setArticle(article));
+  }, []);
 
   return (
     <Layout>
