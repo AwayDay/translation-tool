@@ -7,13 +7,22 @@ const generateArticle = (title: string, body: string): Article => {
   const paragraphTexts = body.split(`\n`).filter(t => t.length > 0);
   const paragraphs = paragraphTexts.map(
     (text, index): Paragraph => {
-      const sentenceText = text.split(/\. /);
-      const sentences = sentenceText.map(
-        (text, index): Sentence => ({
-          id: generateUuid(),
-          original: text,
-          translated: null,
-        })
+      const sentenceTexts = text.split(/\. /);
+      const length = sentenceTexts.length;
+      const sentences = sentenceTexts.map(
+        (text, index): Sentence => {
+          let originalText;
+          if (index < (length - 1)) {
+            originalText = text + '.';
+          } else {
+            originalText = text;
+          }
+          return {
+            id: generateUuid(),
+            original: originalText,
+            translated: null,
+          };
+        }
       );
       return {
         id: generateUuid(),
